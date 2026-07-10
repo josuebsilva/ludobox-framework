@@ -1,4 +1,4 @@
-package core.com.gameframework.assets;
+package core.com.ludobox.assets;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;

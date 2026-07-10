@@ -1,12 +1,12 @@
-package core.com.gameframework.scenes;
+package core.com.ludobox.scenes;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 
-import core.com.gameframework.assets.AssetLoader;
-import core.com.gameframework.core.GameFramework;
+import core.com.ludobox.assets.AssetLoader;
+import core.com.ludobox.core.Ludobox;
 
 public class SceneManager {
     private Array<Scene> stackScenes = new Array<>();
@@ -20,9 +20,9 @@ public class SceneManager {
     private Cmd pendingCmd     = null;
     private Scene pendingScene = null;
 
-    private GameFramework application;
+    private Ludobox application;
 
-    public SceneManager(SpriteBatch batch, ShapeRenderer shapeRenderer, OrthographicCamera camera, AssetLoader assetLoader, GameFramework application) {
+    public SceneManager(SpriteBatch batch, ShapeRenderer shapeRenderer, OrthographicCamera camera, AssetLoader assetLoader, Ludobox application) {
         this.batch         = batch;
         this.shapeRenderer = shapeRenderer;
         this.camera        = camera;

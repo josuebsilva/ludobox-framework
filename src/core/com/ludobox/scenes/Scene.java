@@ -4,7 +4,7 @@
  * @license      {@link https://opensource.org/licenses/MIT|MIT License}
  */
 
-package core.com.gameframework.scenes;
+package core.com.ludobox.scenes;
 
 import java.util.Comparator;
 
@@ -15,12 +15,12 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-import core.com.gameframework.components.Collider;
-import core.com.gameframework.components.SpriteRenderer;
-import core.com.gameframework.core.GameFramework;
-import core.com.gameframework.gameobjects.GameObject;
-import core.com.gameframework.ILifeCycle;
-import core.com.gameframework.assets.AssetLoader;
+import core.com.ludobox.components.Collider;
+import core.com.ludobox.components.SpriteRenderer;
+import core.com.ludobox.core.Ludobox;
+import core.com.ludobox.gameobjects.GameObject;
+import core.com.ludobox.ILifeCycle;
+import core.com.ludobox.assets.AssetLoader;
 
 /**
  * @author Josué Barbosa
@@ -45,7 +45,7 @@ public abstract class Scene implements ILifeCycle {
                                     b.gameObject.transform.zIndex);
 
     private Stage stage;
-    protected GameFramework application;
+    protected Ludobox application;
     
     public final void init(
         SpriteBatch batch, 
@@ -53,7 +53,7 @@ public abstract class Scene implements ILifeCycle {
         OrthographicCamera camera, 
         AssetLoader assetLoader, 
         SceneManager sceneManager,
-        GameFramework application
+        Ludobox application
     ) {
         this.batch         = batch;
         this.shapeRenderer = shapeRenderer;

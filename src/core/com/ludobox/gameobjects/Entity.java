@@ -4,7 +4,7 @@
  * @license      {@link https://opensource.org/licenses/MIT|MIT License}
  */
 
-package core.com.gameframework.gameobjects;
+package core.com.ludobox.gameobjects;
 public class Entity {
     private boolean pendingDestroy;
     public void destroy() {

@@ -4,7 +4,7 @@
  * @license      {@link https://opensource.org/licenses/MIT|MIT License}
  */
 
-package core.com.gameframework.gameobjects;
+package core.com.ludobox.gameobjects;
 
 /**
  * Layer — camadas de objetos para renderização e filtragem de colisão.

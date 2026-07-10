@@ -4,7 +4,7 @@
  * @license      {@link https://opensource.org/licenses/MIT|MIT License}
  */
 
-package core.com.gameframework.core;
+package core.com.ludobox.core;
 import org.lwjgl.opengl.GL20;
 
 import com.badlogic.gdx.ApplicationListener;
@@ -17,11 +17,11 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import core.com.gameframework.assets.AssetLoader;
-import core.com.gameframework.scenes.Scene;
-import core.com.gameframework.scenes.SceneManager;
+import core.com.ludobox.assets.AssetLoader;
+import core.com.ludobox.scenes.Scene;
+import core.com.ludobox.scenes.SceneManager;
 
-public class GameFramework implements ApplicationListener{
+public class Ludobox implements ApplicationListener{
     public static final int VIRTUAL_WIDTH  = 1280;
     public static final int VIRTUAL_HEIGHT = 720;
 
@@ -35,7 +35,7 @@ public class GameFramework implements ApplicationListener{
 
     private Scene initialScene;
 
-    public GameFramework(Scene initialScene) {
+    public Ludobox(Scene initialScene) {
         this.initialScene = initialScene;
     }
 

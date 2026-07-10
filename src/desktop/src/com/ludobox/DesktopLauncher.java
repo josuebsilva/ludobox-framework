@@ -1,19 +1,19 @@
-package desktop.src.com.gameframework;
-import core.com.gameframework.core.GameFramework;
-import game.demo.GameScene;
+package desktop.src.com.ludobox;
+import core.com.ludobox.core.Ludobox;
+import game.triangle.GameLevel;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 public class DesktopLauncher {
     public static void main(String[] args) throws Exception {
-        System.out.println("GameFramework Engine");
+        System.out.println("Ludobox Engine");
 
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-        config.setTitle("GameFramework Engine");
-        config.setWindowedMode(GameFramework.VIRTUAL_WIDTH, GameFramework.VIRTUAL_HEIGHT);
+        config.setTitle("Ludobox Engine");
+        config.setWindowedMode(Ludobox.VIRTUAL_WIDTH, Ludobox.VIRTUAL_HEIGHT);
         config.setForegroundFPS(60);
         config.useVsync(true);
 
-        new Lwjgl3Application(new GameFramework(new GameScene()), config);
+        new Lwjgl3Application(new Ludobox(new GameLevel()), config);
     }
 }

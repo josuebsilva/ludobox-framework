@@ -4,9 +4,9 @@
  * @license      {@link https://opensource.org/licenses/MIT|MIT License}
  */
 
-package core.com.gameframework.gameobjects;
+package core.com.ludobox.gameobjects;
 
-import core.com.gameframework.ILifeCycle;
+import core.com.ludobox.ILifeCycle;
 
 public class Component implements ILifeCycle{
     public GameObject gameObject;

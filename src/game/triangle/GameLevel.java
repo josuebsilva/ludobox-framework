@@ -20,11 +20,11 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 
-import core.com.gameframework.components.SpriteRenderer;
-import core.com.gameframework.core.GameFramework;
-import core.com.gameframework.core.Physics;
-import core.com.gameframework.gameobjects.GameObject;
-import core.com.gameframework.scenes.Scene;
+import core.com.ludobox.components.SpriteRenderer;
+import core.com.ludobox.core.Ludobox;
+import core.com.ludobox.core.Physics;
+import core.com.ludobox.gameobjects.GameObject;
+import core.com.ludobox.scenes.Scene;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonReader;
@@ -50,7 +50,7 @@ public class GameLevel extends Scene{
         labelStyle.fontColor = Color.WHITE;
         labelStyle.font = font;
         label = new Label("Score: 0", labelStyle);
-        label.setPosition(0, GameFramework.VIRTUAL_HEIGHT - 100);
+        label.setPosition(0, Ludobox.VIRTUAL_HEIGHT - 100);
         application.getStage().addActor(label);
 
         TextureAtlas atlas = assetLoader.loadAtlas("assets/pack.atlas");
@@ -79,7 +79,7 @@ public class GameLevel extends Scene{
         );
 
         FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = new PolygonShape();
+        fixtureDef.shape = polygonShape;
         fixtureDef.density = 0.5f;
         fixtureDef.friction = 0.4f;
         fixtureDef.restitution = 0.6f;

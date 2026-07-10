@@ -1,4 +1,4 @@
-package core.com.gameframework.components;
+package core.com.ludobox.components;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-import core.com.gameframework.gameobjects.Component;
-import core.com.gameframework.gameobjects.Transform;
+import core.com.ludobox.gameobjects.Component;
+import core.com.ludobox.gameobjects.Transform;
 
 /**
  * SpriteRenderer

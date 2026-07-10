@@ -1,4 +1,4 @@
-# 🚀 Mini Game Framework
+# 🚀 Ludobox Framework
 
 This is a simple 2D Game Framework.
 
@@ -48,7 +48,7 @@ project/
 Clone repository:
 
 ```bash
-git clone https://github.com/josuebsilva/game-framework.git
+git clone https://github.com/josuebsilva/ludobox-framework.git
 cd project
 ```
 

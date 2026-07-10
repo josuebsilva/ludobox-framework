@@ -8,4 +8,4 @@ for /R src %%f in (*.java) do (
 
 javac -source 8 -target 8 -cp "lib/*" -d bin @sources.txt
 
-java -cp "%CP%" desktop.src.com.gameframework.DesktopLauncher
+java -cp "%CP%" desktop.src.com.ludobox.DesktopLauncher

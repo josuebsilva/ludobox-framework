@@ -1,4 +1,4 @@
-package core.com.gameframework;
+package core.com.ludobox;
 
 public interface ILifeCycle {
     public void onCreate();

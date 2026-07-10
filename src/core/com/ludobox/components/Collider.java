@@ -4,13 +4,13 @@
  * @license      {@link https://opensource.org/licenses/MIT|MIT License}
  */
 
-package core.com.gameframework.components;
+package core.com.ludobox.components;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-import core.com.gameframework.gameobjects.Component;
-import core.com.gameframework.gameobjects.GameObject;
+import core.com.ludobox.gameobjects.Component;
+import core.com.ludobox.gameobjects.GameObject;
 
 public class Collider extends Component {
     public final Rectangle bounds = new Rectangle();

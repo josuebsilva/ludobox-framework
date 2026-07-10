@@ -1,7 +1,7 @@
-package core.com.gameframework.components;
+package core.com.ludobox.components;
 import com.badlogic.gdx.audio.Sound;
 
-import core.com.gameframework.gameobjects.Component;
+import core.com.ludobox.gameobjects.Component;
 
 public class SoundSource extends Component {
     public Sound sound;

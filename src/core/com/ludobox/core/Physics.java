@@ -1,4 +1,4 @@
-package core.com.gameframework.core;
+package core.com.ludobox.core;
 
 public final class Physics {
     public static final float PPM = 32f;

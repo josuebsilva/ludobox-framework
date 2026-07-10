@@ -4,10 +4,10 @@
  * @license      {@link https://opensource.org/licenses/MIT|MIT License}
  */
 
-package core.com.gameframework.gameobjects;
+package core.com.ludobox.gameobjects;
 import com.badlogic.gdx.utils.Array;
 
-import core.com.gameframework.ILifeCycle;
+import core.com.ludobox.ILifeCycle;
 
 public class GameObject extends Entity implements ILifeCycle {
     //Identity of object

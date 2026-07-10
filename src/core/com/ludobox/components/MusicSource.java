@@ -4,10 +4,10 @@
  * @license      {@link https://opensource.org/licenses/MIT|MIT License}
  */
 
-package core.com.gameframework.components;
+package core.com.ludobox.components;
 import com.badlogic.gdx.audio.Music;
 
-import core.com.gameframework.gameobjects.Component;
+import core.com.ludobox.gameobjects.Component;
 
 public class MusicSource extends Component {
     public Music music;
