@@ -1,0 +1,25 @@
+/**
+ * @author       Josué Barbosa <contato.josuebarbosa@gmail.com>
+ * @copyright    2026 Josué Barbosa da Silva.
+ * @license      {@link https://opensource.org/licenses/MIT|MIT License}
+ */
+
+package core.com.gameframework.components;
+import com.badlogic.gdx.audio.Music;
+
+import core.com.gameframework.gameobjects.Component;
+
+public class MusicSource extends Component {
+    public Music music;
+
+    public MusicSource(Music music) {
+        this.music = music;
+    }
+
+    @Override
+    public void onDestroy() {
+        if(music != null) {
+            music.dispose();   
+        }
+    }
+}

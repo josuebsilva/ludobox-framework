@@ -3,9 +3,9 @@ package game.demo.components;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 
-import core.com.ludobox.components.SpriteRenderer;
-import core.com.ludobox.core.LudoBox;
-import core.com.ludobox.gameobjects.Component;
+import core.com.gameframework.components.SpriteRenderer;
+import core.com.gameframework.core.GameFramework;
+import core.com.gameframework.gameobjects.Component;
 
 public class BucketController extends Component {
     public boolean collided = false;
@@ -17,7 +17,7 @@ public class BucketController extends Component {
     @Override
     public void onUpdate(float deltaTime) {
         if(Gdx.input.isTouched()) {
-            float xPos = MathUtils.clamp(Gdx.input.getX(), 0, LudoBox.VIRTUAL_WIDTH - gameObject.getComponent(SpriteRenderer.class).width);
+            float xPos = MathUtils.clamp(Gdx.input.getX(), 0, GameFramework.VIRTUAL_WIDTH - gameObject.getComponent(SpriteRenderer.class).width);
             gameObject.transform.setPosition(xPos, gameObject.transform.getY());
         }
 
