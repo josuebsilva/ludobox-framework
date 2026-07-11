@@ -22,9 +22,7 @@ import core.com.ludobox.scenes.Scene;
 import core.com.ludobox.scenes.SceneManager;
 
 public class Ludobox implements ApplicationListener{
-    public static final int VIRTUAL_WIDTH  = 1280;
-    public static final int VIRTUAL_HEIGHT = 720;
-
+    
     private SpriteBatch        batch;
     private Viewport           viewport;
     private ShapeRenderer      shapeRenderer;
@@ -34,20 +32,31 @@ public class Ludobox implements ApplicationListener{
     private Stage stage;
 
     private Scene initialScene;
+    private Config config;
 
     public Ludobox(Scene initialScene) {
         this.initialScene = initialScene;
+        this.config = new Config();
+    }
+
+    public Ludobox(Scene initialScene, Config config) {
+        this.initialScene = initialScene;
+        this.config = config;
+    }
+
+    public Config getConfig() {
+        return this.config;
     }
 
     @Override
     public void create() {
-        stage          = new Stage(new StretchViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT));
+        stage          = new Stage(new StretchViewport(Config.WIDTH, Config.HEIGHT));
         Gdx.input.setInputProcessor(stage);
         
         batch          = new SpriteBatch();
         shapeRenderer  = new ShapeRenderer();
         camera         = new OrthographicCamera();
-        viewport       = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, camera);
+        viewport       = new FitViewport(Config.WIDTH, Config.HEIGHT, camera);
         viewport.apply();
 
         assetLoader  = new AssetLoader();

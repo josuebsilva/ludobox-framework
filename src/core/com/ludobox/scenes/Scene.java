@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import core.com.ludobox.components.Collider;
 import core.com.ludobox.components.SpriteRenderer;
 import core.com.ludobox.core.Ludobox;
+import core.com.ludobox.core.physics.PhysicSystem;
 import core.com.ludobox.gameobjects.GameObject;
 import core.com.ludobox.ILifeCycle;
 import core.com.ludobox.assets.AssetLoader;
@@ -34,6 +35,10 @@ public abstract class Scene implements ILifeCycle {
     protected OrthographicCamera camera;
     protected AssetLoader assetLoader;
     protected SceneManager sceneManager;
+
+    protected PhysicSystem physicSystem;
+    public boolean hasPhysics = true;
+
 
     // GameObjects
     private final Array<GameObject> objects        = new Array<>();
@@ -64,6 +69,11 @@ public abstract class Scene implements ILifeCycle {
         
         stage = new Stage(new ScreenViewport());
 
+        if(hasPhysics) {
+            physicSystem = new PhysicSystem();
+            physicSystem.init(application.getConfig().physicDebug);
+        }
+
         onCreate();
     }
 
@@ -82,8 +92,10 @@ public abstract class Scene implements ILifeCycle {
             objects.get(i).update(detalTime);
         }
 
-        //Collision detect
+        //Basic Collision detect
         collisionDetect();
+
+        physicSystem.update(detalTime, this.objects);
 
         //Remove objects destroyeds
         for (int i = objects.size - 1; i >= 0; i--) {
@@ -95,6 +107,7 @@ public abstract class Scene implements ILifeCycle {
     }
 
     public final void render(float detalTime) {
+
         renderers.clear();
         for (GameObject gameObject: objects) {
             if (!gameObject.active) continue;
@@ -110,6 +123,8 @@ public abstract class Scene implements ILifeCycle {
 
         stage.draw();
 
+        //Render physic debug
+        physicSystem.render(camera);
 
         onRender(detalTime);
     }

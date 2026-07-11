@@ -9,7 +9,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 
 import core.com.ludobox.components.SpriteRenderer;
-import core.com.ludobox.core.Ludobox;
+import core.com.ludobox.core.Config;
 import core.com.ludobox.gameobjects.Component;
 
 public class BucketController extends Component {
@@ -22,7 +22,7 @@ public class BucketController extends Component {
     @Override
     public void onUpdate(float deltaTime) {
         if(Gdx.input.isTouched()) {
-            float xPos = MathUtils.clamp(Gdx.input.getX(), 0, Ludobox.VIRTUAL_WIDTH - gameObject.getComponent(SpriteRenderer.class).width);
+            float xPos = MathUtils.clamp(Gdx.input.getX(), 0, Config.WIDTH - gameObject.getComponent(SpriteRenderer.class).width);
             gameObject.transform.setPosition(xPos, gameObject.transform.getY());
         }
 

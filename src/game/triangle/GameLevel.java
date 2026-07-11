@@ -5,6 +5,7 @@
  */
 
 package game.triangle;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -26,9 +27,11 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 
+import core.com.ludobox.components.RigidBody2D;
 import core.com.ludobox.components.SpriteRenderer;
+import core.com.ludobox.core.Config;
 import core.com.ludobox.core.Ludobox;
-import core.com.ludobox.core.Physics;
+import core.com.ludobox.core.physics.Physics;
 import core.com.ludobox.gameobjects.GameObject;
 import core.com.ludobox.scenes.Scene;
 
@@ -39,14 +42,9 @@ import com.badlogic.gdx.utils.JsonValue;
 public class GameLevel extends Scene{
     private Label label;
     private int score = 0;
-    World world;
-    Box2DDebugRenderer debugRenderer;
 
     @Override
     public void onCreate() {
-        Box2D.init();
-        debugRenderer = new Box2DDebugRenderer();
-        world = new World(new Vector2(0, -9.8f), true);
 
         System.out.println("My game");
         assetLoader.loadTexture("assets/pack.png");
@@ -56,7 +54,7 @@ public class GameLevel extends Scene{
         labelStyle.fontColor = Color.WHITE;
         labelStyle.font = font;
         label = new Label("Score: 0", labelStyle);
-        label.setPosition(0, Ludobox.VIRTUAL_HEIGHT - 100);
+        label.setPosition(0, Config.WIDTH - 100);
         application.getStage().addActor(label);
 
         TextureAtlas atlas = assetLoader.loadAtlas("assets/pack.atlas");
@@ -68,30 +66,8 @@ public class GameLevel extends Scene{
         renderPlayer.setPivot(100 / 2, 100 / 2);
 
         //Physics
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyType.DynamicBody;
-        bodyDef.position.set(
-            Physics.toMeters(400), 
-            Physics.toMeters(500)
-        );
-
-        Body body = world.createBody(bodyDef);
-        body.setUserData(character);
-        
-        PolygonShape polygonShape = new PolygonShape();
-        polygonShape.setAsBox(
-            Physics.toMeters(50), 
-            Physics.toMeters(50)
-        );
-
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = polygonShape;
-        fixtureDef.density = 0.5f;
-        fixtureDef.friction = 0.4f;
-        fixtureDef.restitution = 0.6f;
-
-        Fixture fixture = body.createFixture(fixtureDef);
-        polygonShape.dispose();
+        RigidBody2D playerRigidBody2D = new RigidBody2D(RigidBody2D.Type.Dynamic);
+        character.addComponent(playerRigidBody2D);
 
 
         TextureAtlas.AtlasRegion regionGround = atlas.findRegion("rect1");
@@ -102,27 +78,8 @@ public class GameLevel extends Scene{
         ground.transform.setScale(8, 1);
 
         //Physics
-        BodyDef bodyDefGround = new BodyDef();
-        bodyDefGround.type = BodyType.StaticBody;
-        bodyDefGround.position.set(
-            Physics.toMeters(0),
-            Physics.toMeters(50)
-        );
-
-        Body bodyGround = world.createBody(bodyDefGround);
-        bodyGround.setUserData(ground);
-        
-        PolygonShape polygonShapeGround = new PolygonShape();
-        polygonShapeGround.setAsBox(
-            Physics.toMeters(400),
-            Physics.toMeters(50)
-        );
-
-        FixtureDef fixtureDefGround = new FixtureDef();
-        fixtureDefGround.shape = polygonShapeGround;
-
-        Fixture fixtureGround = bodyGround.createFixture(fixtureDefGround);
-        polygonShapeGround.dispose();
+        RigidBody2D goundRigidBody2D = new RigidBody2D(RigidBody2D.Type.Static);
+        ground.addComponent(goundRigidBody2D);
         
 
         /*JsonValue map = new JsonReader().parse(Gdx.files.internal("assets/MainScene.dt"));
@@ -168,30 +125,11 @@ public class GameLevel extends Scene{
 
     @Override
     public void onUpdate(float deltaTime) {
-        world.step(deltaTime, 6, 2);
     }
 
     Array<Body> bodies = new Array<Body>();
 
     @Override
     public void onRender(float deltaTime) {
-        Matrix4 debugMatrix = new Matrix4(camera.combined);
-        debugMatrix.scale(Physics.PPM, Physics.PPM, 1);
-        debugRenderer.render(world, debugMatrix);
-
-        world.getBodies(bodies);
-        //System.out.println("bodies: "+bodies.size);
-        for (Body b : bodies) {
-            // Get the body's user data - in this example, our user
-            // data is an instance of the Entity class
-            GameObject e = (GameObject) b.getUserData();
-            e.transform.setPosition(
-                Physics.toPixels(b.getPosition().x), 
-                Physics.toPixels(b.getPosition().y)
-            );
-            e.transform.setRotation(
-                b.getAngle() * MathUtils.radiansToDegrees
-            );
-        }
     }
 }

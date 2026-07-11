@@ -4,6 +4,7 @@
  * @license      {@link https://opensource.org/licenses/MIT|MIT License}
  */
 package game.demo;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -17,6 +18,7 @@ import core.com.ludobox.components.Collider.CollisionListener;
 import core.com.ludobox.components.Rigidbody;
 import core.com.ludobox.components.SoundSource;
 import core.com.ludobox.components.SpriteRenderer;
+import core.com.ludobox.core.Config;
 import core.com.ludobox.core.Ludobox;
 import core.com.ludobox.gameobjects.GameObject;
 import core.com.ludobox.scenes.Scene;
@@ -39,12 +41,12 @@ public class GameScene extends Scene{
         labelStyle.fontColor = Color.WHITE;
         labelStyle.font = font;
         label = new Label("Score: 0", labelStyle);
-        label.setPosition(100, Ludobox.VIRTUAL_HEIGHT - 100);
+        label.setPosition(100, Config.WIDTH - 100);
         application.getStage().addActor(label);
 
 
         GameObject background = instantiate("background", 0, 0);
-        SpriteRenderer sprite = new SpriteRenderer(assetLoader.loadTexture("assets/background.png"), Ludobox.VIRTUAL_WIDTH, Ludobox.VIRTUAL_HEIGHT);
+        SpriteRenderer sprite = new SpriteRenderer(assetLoader.loadTexture("assets/background.png"), Config.WIDTH, Config.HEIGHT);
         sprite.setAlpha(0.2f);
         sprite.setPivot(0, 0);
         background.addComponent(sprite);
@@ -97,7 +99,7 @@ public class GameScene extends Scene{
         SpriteRenderer spriteRenderer = new SpriteRenderer(100, 100);
         spriteRenderer.setTexture(assetLoader.getFile(Texture.class, "assets/drop.png"));
 
-        float randPosX = MathUtils.random(0, Ludobox.VIRTUAL_WIDTH - spriteRenderer.width);
+        float randPosX = MathUtils.random(0, Config.WIDTH - spriteRenderer.width);
         Collider collider = new Collider(spriteRenderer.width, spriteRenderer.height);
         drop.addComponent(spriteRenderer);
         drop.addComponent(collider);
@@ -105,7 +107,7 @@ public class GameScene extends Scene{
         rigidbody.useGravity = true;
         drop.addComponent(rigidbody);
         
-        drop.transform.setPosition(randPosX, Ludobox.VIRTUAL_HEIGHT - spriteRenderer.height);
+        drop.transform.setPosition(randPosX, Config.HEIGHT - spriteRenderer.height);
         drop.transform.zIndex = 1;
     }
 }

@@ -94,7 +94,7 @@ public class DesktopLauncher {
 
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.setTitle("Ludobox Engine");
-        config.setWindowedMode(Ludobox.VIRTUAL_WIDTH, Ludobox.VIRTUAL_HEIGHT);
+        config.setWindowedMode(Config.WIDTH, Config.HEIGHT);
         config.setForegroundFPS(60);
         config.useVsync(true);
 
