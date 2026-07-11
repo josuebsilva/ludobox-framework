@@ -1,3 +1,9 @@
+/**
+ * @author       Josué Barbosa <contato.josuebarbosa@gmail.com>
+ * @copyright    2026 Ludobox Studio.
+ * @license      {@link https://opensource.org/licenses/MIT|MIT License}
+ */
+
 package game.triangle;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;

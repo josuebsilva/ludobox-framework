@@ -1,3 +1,8 @@
+/**
+ * @author       Josué Barbosa <contato.josuebarbosa@gmail.com>
+ * @copyright    2026 Ludobox Studio.
+ * @license      {@link https://opensource.org/licenses/MIT|MIT License}
+ */
 package game.demo;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;

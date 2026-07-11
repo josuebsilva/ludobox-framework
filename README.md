@@ -1,6 +1,6 @@
 # 🚀 Ludobox Framework
 
-This is a simple 2D Game Framework.
+This is a simple 2D Game Framework to desktop.
 
 ![Java](https://img.shields.io/badge/Java-21-orange)
 ![License](https://img.shields.io/badge/license-MIT-green)
@@ -62,6 +62,39 @@ Execute:
 
 ## 🎮 How use
 
+Create a Game Scene
+
+```java
+public class GameScene extends Scene { 
+    @Override
+    public void onCreate() {
+        //Instance game objects and load assets
+    }
+
+    @Override
+    public void onUpdate() {
+        //This call every frame
+    }
+}
+```
+Call game launcher
+
+```java
+public class DesktopLauncher {
+    public static void main(String[] args) throws Exception {
+        System.out.println("Ludobox Engine");
+
+        Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+        config.setTitle("Ludobox Engine");
+        config.setWindowedMode(Ludobox.VIRTUAL_WIDTH, Ludobox.VIRTUAL_HEIGHT);
+        config.setForegroundFPS(60);
+        config.useVsync(true);
+
+        new Lwjgl3Application(new Ludobox(new GameScene()), config);
+    }
+}
+```
+
 Example Game Object:
 
 ```java
@@ -117,3 +150,17 @@ public class PlayerController extends Component {
 - [ ] UI
 - [ ] Particle System
 - [ ] Multplatform
+
+## Contributing
+
+Thank you for your interest in contributing!
+
+At this early stage, Ludobox is under heavy development. I'm currently **not accepting pull requests** while the core architecture is being designed.
+
+You're welcome to:
+- Report bugs
+- Open feature requests
+- Ask questions
+- Share ideas and feedback
+
+Once the architecture becomes more stable, contribution guidelines will be published.

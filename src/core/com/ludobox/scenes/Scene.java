@@ -1,6 +1,6 @@
 /**
  * @author       Josué Barbosa <contato.josuebarbosa@gmail.com>
- * @copyright    2026 Josué Barbosa da Silva.
+ * @copyright    2026 Ludobox Studio.
  * @license      {@link https://opensource.org/licenses/MIT|MIT License}
  */
 

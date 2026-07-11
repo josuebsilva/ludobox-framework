@@ -1,6 +1,12 @@
+/**
+ * @author       Josué Barbosa <contato.josuebarbosa@gmail.com>
+ * @copyright    2026 Ludobox Studio.
+ * @license      {@link https://opensource.org/licenses/MIT|MIT License}
+ */
+
 package desktop.src.com.ludobox;
 import core.com.ludobox.core.Ludobox;
-import game.triangle.GameLevel;
+import game.demo.GameScene;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
@@ -14,6 +20,6 @@ public class DesktopLauncher {
         config.setForegroundFPS(60);
         config.useVsync(true);
 
-        new Lwjgl3Application(new Ludobox(new GameLevel()), config);
+        new Lwjgl3Application(new Ludobox(new GameScene()), config);
     }
 }
