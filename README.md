@@ -151,6 +151,10 @@ public class PlayerController extends Component {
 - [ ] Particle System
 - [ ] Multplatform
 
+
+> [!NOTE]
+> Ludobox is under active development. Feedback, bug reports, and suggestions are welcome!
+
 ## Contributing
 
 Thank you for your interest in contributing!
