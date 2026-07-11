@@ -5,6 +5,9 @@ This is a simple 2D Game Framework to desktop.
 ![Java](https://img.shields.io/badge/Java-21-orange)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
+> [!NOTE]
+> Ludobox is under active development. Feedback, bug reports, and suggestions are welcome!
+
 ## ✨ Features
 
 - ✅ Game Objects and Components
@@ -150,10 +153,6 @@ public class PlayerController extends Component {
 - [ ] UI
 - [ ] Particle System
 - [ ] Multplatform
-
-
-> [!NOTE]
-> Ludobox is under active development. Feedback, bug reports, and suggestions are welcome!
 
 ## Contributing
 
