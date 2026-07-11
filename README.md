@@ -10,7 +10,7 @@ This is a simple 2D Game Framework to desktop.
 
 ## Demo
 
-![Platformer Demo](docs/screenshotgif.gif)
+![Mini Game Demo](docs/screenshotgif.gif)
 
 ## ✨ Features
 
