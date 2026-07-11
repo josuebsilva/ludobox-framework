@@ -8,6 +8,10 @@ This is a simple 2D Game Framework to desktop.
 > [!NOTE]
 > Ludobox is under active development. Feedback, bug reports, and suggestions are welcome!
 
+## Demo
+
+![Platformer Demo](docs/screenshotgif.gif)
+
 ## ✨ Features
 
 - ✅ Game Objects and Components
