@@ -21,11 +21,12 @@ import core.com.ludobox.gameobjects.Component;
 import core.com.ludobox.gameobjects.Transform;
 
 public class RigidBody2D extends Component {
-    public final Vector2 velocity = new Vector2();
-    public boolean useGravity    = false;
-    public float gravity         = -800f; // meters/s²
-    public float drag            = 0.92f; // multiplicador por frame (0=sem atrito, 1=sem drag)
-    public boolean isGrounded    = false;
+    public boolean useGravity     = false;
+    public float gravityScale     = 1f; //Multply the wordl gravity 
+    public float mass             = 1.0f; //Mass Body
+    public float friction         = 0.4f;
+    public float bounce           = 0.0f;
+    public boolean isGrounded     = false;
 
     private BodyDef bodyDef;
     private Body body = null;
@@ -48,35 +49,63 @@ public class RigidBody2D extends Component {
     }
 
     public void init(World world) {
-        if(this.body == null) {
-            bodyDef.position.set(
-                Physics.toMeters(geTransform().getX()), 
-                Physics.toMeters(geTransform().getY())
-            );
-            
-            this.world = world;
-            this.body  = world.createBody(bodyDef);
-            this.body.setUserData(gameObject);
-
-            SpriteRenderer spriteRenderer = getComponent(SpriteRenderer.class);
-            float totalWidth  = spriteRenderer.width * gameObject.transform.getLocalScale().x;
-            float totalHeight = spriteRenderer.width * gameObject.transform.getLocalScale().y;
-
-            PolygonShape polygonShape = new PolygonShape();
-            polygonShape.setAsBox(
-                Physics.toMeters(totalWidth / 2), 
-                Physics.toMeters(totalHeight / 2)
-            );
-
-            FixtureDef fixtureDef = new FixtureDef();
-            fixtureDef.shape = polygonShape;
-            fixtureDef.density = 0.5f;
-            fixtureDef.friction = 0.4f;
-            fixtureDef.restitution = 0.6f;
-
-            Fixture fixture = this.body.createFixture(fixtureDef);
-            polygonShape.dispose();
+        if (this.body != null) {
+            return;
         }
+
+        Transform transform = geTransform();
+        Vector2 worldPosition = transform.getWorldPosition();
+        Vector2 worldScale = transform.getWorldScale();
+        
+        bodyDef.position.set(
+            Physics.toMeters(worldPosition.x), 
+            Physics.toMeters(worldPosition.y)
+        );
+        bodyDef.angle = transform.getWorldRotation() * MathUtils.degreesToRadians;
+        
+        this.world = world;
+        this.body  = world.createBody(bodyDef);
+        this.body.setUserData(gameObject);
+        this.body.setGravityScale(0);
+
+        body.setGravityScale(useGravity ? gravityScale : 0.0f);
+
+        SpriteRenderer spriteRenderer = getComponent(SpriteRenderer.class);
+         if (spriteRenderer == null) {
+            return;
+        }
+        
+        float scaleX = worldScale.x;
+        float scaleY = worldScale.y;
+
+        float totalWidth  = spriteRenderer.width * Math.abs(scaleX);
+        float totalHeight = spriteRenderer.height * Math.abs(scaleY);
+
+        float centerOffsetX = (spriteRenderer.width * 0.5f - spriteRenderer.pivotX) * scaleX;
+
+        float centerOffsetY = (spriteRenderer.height * 0.5f - spriteRenderer.pivotY) * scaleY;
+
+        System.out.println("centerOffsetX "+centerOffsetX);
+        PolygonShape polygonShape = new PolygonShape();
+        polygonShape.setAsBox(
+            Physics.toMeters(totalWidth * 0.5f),
+            Physics.toMeters(totalHeight * 0.5f),
+            new Vector2(
+                Physics.toMeters(centerOffsetX),
+                Physics.toMeters(centerOffsetY)
+            ),
+            0f
+        );
+
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = polygonShape;
+        fixtureDef.density = this.mass;
+        fixtureDef.friction = this.friction;
+        fixtureDef.restitution = this.bounce;
+
+
+        Fixture fixture = this.body.createFixture(fixtureDef);
+        polygonShape.dispose();
     }
 
     @Override
@@ -98,7 +127,50 @@ public class RigidBody2D extends Component {
     }
 
     public void addForce(float fx, float fy) {
-        velocity.add(fx, fy);
+        this.body.applyForce(fx, fy, body.getPosition().x, body.getPosition().y, true);
+    }
+    
+
+    public void addImpulse(float impulseX, float impulseY) {
+        if (this.body == null) {
+            return;
+        }
+        this.body.applyLinearImpulse(
+            impulseX,
+            impulseY,
+            body.getWorldCenter().x,
+            body.getWorldCenter().y,
+            true
+        );
+    }
+
+    public void setVelocity(float vx, float vy) {
+        if (this.body == null) {
+            return;
+        }
+        this.body.setLinearVelocity(Physics.toMeters(vx), Physics.toMeters(vy));
+    }
+
+    public void setVelocityY(float velocityY) {
+        if (this.body == null) {
+            return;
+        }
+        Vector2 currentVelocity = body.getLinearVelocity();
+        body.setLinearVelocity(
+            currentVelocity.x,
+            Physics.toMeters(velocityY)
+        );
+    }
+
+    public void setVelocityX(float velocityX) {
+        if (this.body == null) {
+            return;
+        }
+        Vector2 currentVelocity = body.getLinearVelocity();
+        body.setLinearVelocity(
+            Physics.toMeters(velocityX),
+            currentVelocity.y
+        );
     }
 
     public void setHorizontalVelicity(float vx) {

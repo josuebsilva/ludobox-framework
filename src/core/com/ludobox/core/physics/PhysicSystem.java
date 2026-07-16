@@ -91,6 +91,10 @@ public class PhysicSystem {
         }
     }
 
-    public void destroy() {
+    public void dispose() {
+        this.world.dispose();
+        if(debugRenderer != null) {
+            this.debugRenderer.dispose();
+        }
     }
 }

@@ -11,11 +11,8 @@ import java.util.Comparator;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-import core.com.ludobox.components.Collider;
 import core.com.ludobox.components.SpriteRenderer;
 import core.com.ludobox.core.Ludobox;
 import core.com.ludobox.core.physics.PhysicSystem;
@@ -48,8 +45,6 @@ public abstract class Scene implements ILifeCycle {
     private static final Comparator<SpriteRenderer> SORT_BY_Z = 
         (a, b) -> Integer.compare(a.gameObject.transform.zIndex, 
                                     b.gameObject.transform.zIndex);
-
-    private Stage stage;
     protected Ludobox application;
     
     public final void init(
@@ -66,8 +61,6 @@ public abstract class Scene implements ILifeCycle {
         this.assetLoader   = assetLoader;
         this.sceneManager  = sceneManager;
         this.application   = application;
-        
-        stage = new Stage(new ScreenViewport());
 
         if(hasPhysics) {
             physicSystem = new PhysicSystem();
@@ -77,27 +70,42 @@ public abstract class Scene implements ILifeCycle {
         onCreate();
     }
 
-    //Game loop
-    public final void update(float detalTime) {
-        //Spawn objects in the list
-        if(objectsToSpawn.size > 0) {
-            objects.addAll(objectsToSpawn);
-            objectsToSpawn.clear();
-        }
+    private void flushSpawnQueue() {
+        if (objectsToSpawn.size == 0) return;
 
-        onUpdate(detalTime);
+        objects.addAll(objectsToSpawn);
+        objectsToSpawn.clear();
+    }
+
+    //Game loop
+    public final void update(float deltaTime) {
+        //Spawn objects in the list
+        flushSpawnQueue();
+
+        onUpdate(deltaTime);
 
         //Update all objects
-        for (int i =0; i < objects.size; i++) {
-            objects.get(i).update(detalTime);
+        for (int i = 0; i < objects.size; i++) {
+            GameObject gameObject = objects.get(i);
+
+            if (gameObject.active) {
+                gameObject.update(deltaTime);
+            }
         }
 
-        //Basic Collision detect
-        collisionDetect();
+        if (physicSystem != null) {
+            physicSystem.update(deltaTime, objects);
+        } else {
+            collisionDetect();
+        }
 
-        physicSystem.update(detalTime, this.objects);
+        onLateUpdate(deltaTime);
 
         //Remove objects destroyeds
+        removeDestroyedObjects();
+    }
+
+    private void removeDestroyedObjects() {
         for (int i = objects.size - 1; i >= 0; i--) {
             if(objects.get(i).isPendingDestroy()) {
                 objects.get(i).onDestroy();
@@ -109,28 +117,35 @@ public abstract class Scene implements ILifeCycle {
     public final void render(float detalTime) {
 
         renderers.clear();
-        for (GameObject gameObject: objects) {
+        for (GameObject gameObject : objects) {
             if (!gameObject.active) continue;
-            SpriteRenderer spriteRenderer = gameObject.getComponent(SpriteRenderer.class);
-            if(spriteRenderer != null && spriteRenderer.enabled) renderers.add(spriteRenderer);
+
+            SpriteRenderer renderer =
+                gameObject.getComponent(SpriteRenderer.class);
+
+            if (renderer != null && renderer.enabled) {
+                renderers.add(renderer);
+            }
         }
+
         renderers.sort(SORT_BY_Z);
 
         //Draw sprites
         batch.begin();
-        for (SpriteRenderer spriteRenderer: renderers) spriteRenderer.draw(batch);
+        for (SpriteRenderer renderer : renderers) {
+            renderer.draw(batch);
+        }
         batch.end();
 
-        stage.draw();
+        onRender(detalTime);
 
         //Render physic debug
-        physicSystem.render(camera);
-
-        onRender(detalTime);
+        if (physicSystem != null) {
+            physicSystem.render(camera);
+        }
     }
 
     public void resize(int width, int height) { 
-        stage.getViewport().update(width, height, true);
         onResize(width, height);
     }
     public void pause()                       { onPause();}
@@ -140,9 +155,13 @@ public abstract class Scene implements ILifeCycle {
         onDestroy();
         for (GameObject gameObject: objects) gameObject.onDestroy();
 
-        stage.dispose();
         objects.clear();
         objectsToSpawn.clear();
+        renderers.clear();
+
+        if (physicSystem != null) {
+            physicSystem.dispose();
+        }
     }
 
     /**
@@ -160,8 +179,10 @@ public abstract class Scene implements ILifeCycle {
      */
 
     public GameObject instantiate(String name, float x, float y) {
-        GameObject gameObject =  instantiate(name);
+        GameObject gameObject = new GameObject(name);
+        objectsToSpawn.add(gameObject);
         gameObject.transform.setPosition(x, y);
+        gameObject.onCreate();
         return gameObject;
     }
 
@@ -202,6 +223,7 @@ public abstract class Scene implements ILifeCycle {
     //Subclass hooks
     public abstract void onCreate();
     public void onUpdate(float deltaTime)          {}
+    protected void onLateUpdate(float deltaTime)   {}
     protected void onRender(float deltaTime)       {}
     protected void onResize(int width, int height) {}
     protected void onPause()                       {}
@@ -212,25 +234,6 @@ public abstract class Scene implements ILifeCycle {
      * Detect collision
      */
     private void collisionDetect() {
-        Array<GameObject> withCollider = new Array<>();
-        for (GameObject gameObject: objects) {
-            if(gameObject.active && gameObject.hasComponent(Collider.class)) {
-                withCollider.add(gameObject);
-            }
-        }
-
-        for (int i =0; i < withCollider.size; i++) {
-            for (int j = i + 1; j < withCollider.size; j++) {
-                GameObject a = withCollider.get(i);
-                GameObject b = withCollider.get(j);
-                Collider ca = a.getComponent(Collider.class);
-                Collider cb = b.getComponent(Collider.class);
-                if(ca.overlaps(cb)) {
-                    ca.fireContact(b);
-                    cb.fireContact(a);
-                }
-            }
-        }
     }
 
 }

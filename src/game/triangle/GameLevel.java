@@ -6,9 +6,13 @@
 
 package game.triangle;
 
+import java.util.Random;
+
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g3d.utils.shapebuilders.BoxShapeBuilder;
 import com.badlogic.gdx.math.MathUtils;
@@ -42,6 +46,8 @@ import com.badlogic.gdx.utils.JsonValue;
 public class GameLevel extends Scene{
     private Label label;
     private int score = 0;
+    GameObject player;
+    GameObject bg;
 
     @Override
     public void onCreate() {
@@ -54,77 +60,68 @@ public class GameLevel extends Scene{
         labelStyle.fontColor = Color.WHITE;
         labelStyle.font = font;
         label = new Label("Score: 0", labelStyle);
-        label.setPosition(0, Config.WIDTH - 100);
+        label.setPosition(0, Config.HEIGHT - 100);
         application.getStage().addActor(label);
 
-        TextureAtlas atlas = assetLoader.loadAtlas("assets/pack.atlas");
-        TextureAtlas.AtlasRegion regionPlayer = atlas.findRegion("icon");
+        SpriteRenderer bgSprite = new SpriteRenderer(assetLoader.loadTexture("assets/bg_rect.png"), Config.WIDTH, Config.HEIGHT);
+        bgSprite.setPivot(Config.WIDTH / 2, Config.HEIGHT / 2);
+        bg = instantiate("background",0, 0);
+        bg.transform.zIndex = 0;
+        bg.addComponent(bgSprite);
 
+        TextureAtlas atlas = assetLoader.loadAtlas("assets/pack.atlas");
+        
+
+        TextureAtlas.AtlasRegion regionPlayer = atlas.findRegion("triagle");
         SpriteRenderer renderPlayer = new SpriteRenderer(regionPlayer, 100, 100);
-        GameObject character = instantiate("character", 400, 500);
-        character.addComponent(renderPlayer);
+        player = instantiate("character",199, 200);
+        player.addComponent(renderPlayer);
         renderPlayer.setPivot(100 / 2, 100 / 2);
 
         //Physics
         RigidBody2D playerRigidBody2D = new RigidBody2D(RigidBody2D.Type.Dynamic);
-        character.addComponent(playerRigidBody2D);
+        playerRigidBody2D.useGravity = true;
+        playerRigidBody2D.mass = 3f;
+        player.addComponent(playerRigidBody2D);
 
-
-        TextureAtlas.AtlasRegion regionGround = atlas.findRegion("rect1");
-        SpriteRenderer renderGround = new SpriteRenderer(regionGround, 100, 100);
-        GameObject ground = instantiate("ground", 0, 50);
-        ground.addComponent(renderGround);
-        renderGround.setPivot(100 / 2, 100 / 2);
-        ground.transform.setScale(8, 1);
-
-        //Physics
-        RigidBody2D goundRigidBody2D = new RigidBody2D(RigidBody2D.Type.Static);
-        ground.addComponent(goundRigidBody2D);
-        
-
-        /*JsonValue map = new JsonReader().parse(Gdx.files.internal("assets/MainScene.dt"));
+        JsonValue map = new JsonReader().parse(Gdx.files.internal("assets/MainScene.dt"));
         JsonValue composite = map.get("composite");
         JsonValue content = composite.get("content");
-        JsonValue SimpleImageVO = content.get("SimpleImageVO");*/
+        JsonValue SimpleImageVO = content.get("SimpleImageVO");
 
+        for (JsonValue object : SimpleImageVO) {
+            if(!object.has("itemIdentifier")) {
+                TextureAtlas.AtlasRegion region = atlas.findRegion(object.getString("imageName"));
+            
+                GameObject gameObject = instantiate(object.getString("uniqueId"), object.getFloat("x"), object.getFloat("y") );
 
-        /*for (JsonValue object : SimpleImageVO) {
-            System.out.println("Available Mode: " + object.getString("uniqueId"));
-            TextureAtlas.AtlasRegion region = atlas.findRegion(object.getString("imageName"));
-            
-            GameObject gameObject = instantiate(object.getString("uniqueId"), object.getFloat("x"), object.getFloat("y") );
-            
-            
-            SpriteRenderer spriteRenderer = new SpriteRenderer(region, region.originalWidth, region.originalHeight);
-            spriteRenderer.setPivot(object.getFloat("originX"), object.getFloat("originY"));
-            gameObject.transform.setScale( object.has("scaleX") ? object.getFloat("scaleX"): gameObject.transform.getLocalScale().x, object.has("scaleY") ? object.getFloat("scaleY"): gameObject.transform.getLocalScale().y);
-            gameObject.addComponent(spriteRenderer);
-            BodyDef bodyDef = new BodyDef();
-            bodyDef.type = BodyType.StaticBody;
-
-            Body body = world.createBody(bodyDef);
-            body.setUserData(gameObject);
-            if(!object.getString("imageName").equals("icon")) {
-                body.setGravityScale(0);
-                body.setFixedRotation(true);
+                SpriteRenderer spriteRenderer = new SpriteRenderer(region, region.originalWidth, region.originalHeight);
+                gameObject.transform.setScale( object.has("scaleX") ? object.getFloat("scaleX"): gameObject.transform.getLocalScale().x, object.has("scaleY") ? object.getFloat("scaleY"): gameObject.transform.getLocalScale().y);
+                spriteRenderer.setPivot(object.getFloat("originX"), object.getFloat("originY"));
+                
+                gameObject.addComponent(spriteRenderer);
+                if(object.has("physics")) {
+                    RigidBody2D goundRigid = new RigidBody2D(RigidBody2D.Type.Static);
+                    gameObject.addComponent(goundRigid);
+                }
             }
-            
-            CircleShape circleShape = new CircleShape();
-            circleShape.setRadius(6f);
-
-            FixtureDef fixtureDef = new FixtureDef();
-            fixtureDef.shape = circleShape;
-            fixtureDef.density = 0.5f;
-            fixtureDef.friction = 0.4f;
-            fixtureDef.restitution = 0.6f;
-
-            Fixture fixture = body.createFixture(fixtureDef);
-            circleShape.dispose();
-        }*/
+        }
     }
 
     @Override
     public void onUpdate(float deltaTime) {
+        if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+            player.getComponent(RigidBody2D.class).addImpulse(0, 320);
+        }
+        player.getComponent(RigidBody2D.class).setVelocityX(270);
+    }
+
+    @Override
+    public void onLateUpdate(float deltaTime) {
+        camera.position.x += (player.transform.getX() - camera.position.x) * 5 * deltaTime;
+        camera.position.y += (player.transform.getY() - camera.position.y) * 5 * deltaTime;
+
+        bg.transform.setPosition(camera.position.x, camera.position.y);
     }
 
     Array<Body> bodies = new Array<Body>();

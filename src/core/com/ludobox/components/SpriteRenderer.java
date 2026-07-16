@@ -25,8 +25,8 @@ public class SpriteRenderer extends Component {
     public boolean flipX = false;
     public boolean flipY = false;
     public boolean visible = true;
-    private float pivotX = 0.0f;
-    private float pivotY = 0.0f;
+    public float pivotX = 0.0f;
+    public float pivotY = 0.0f;
 
 
     public SpriteRenderer(TextureRegion textureRegion, float width, float height) {
@@ -77,7 +77,7 @@ public class SpriteRenderer extends Component {
             worldScale.y * (flipY ? -1 : 1),
             worldRot
         );
-        spriteBatch.setColor(tint);
+        spriteBatch.setColor(Color.WHITE);
     }
 
 

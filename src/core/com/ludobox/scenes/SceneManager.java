@@ -38,8 +38,15 @@ public class SceneManager {
 
     public void push(Scene scene) { pendingCmd = Cmd.PUSH; pendingScene = scene;}
     public void pop() { pendingCmd = Cmd.POP; pendingScene = null;}
-    public void replace(Scene scene) { pendingCmd = Cmd.REPLACE; pendingScene = scene;}
-    public void clear(Scene scene) { pendingCmd = Cmd.CLEAR; pendingScene = scene;}
+    public void replace(Scene scene) { 
+        pendingCmd = Cmd.REPLACE; 
+        pendingScene = scene;
+    }
+    public void clear(Scene scene) { 
+        application.getStage().clear();
+        pendingCmd = Cmd.CLEAR; 
+        pendingScene = scene;
+    }
 
     public void update(float deltaTime) {
         applyPending();

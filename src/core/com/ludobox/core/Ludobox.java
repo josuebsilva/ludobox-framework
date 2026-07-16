@@ -5,7 +5,7 @@
  */
 
 package core.com.ludobox.core;
-import org.lwjgl.opengl.GL20;
+import com.badlogic.gdx.graphics.GL20;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
@@ -50,14 +50,15 @@ public class Ludobox implements ApplicationListener{
 
     @Override
     public void create() {
-        stage          = new Stage(new StretchViewport(Config.WIDTH, Config.HEIGHT));
+        batch          = new SpriteBatch();
+
+        stage          = new Stage(new StretchViewport(Config.WIDTH, Config.HEIGHT), batch);
         Gdx.input.setInputProcessor(stage);
         
-        batch          = new SpriteBatch();
         shapeRenderer  = new ShapeRenderer();
         camera         = new OrthographicCamera();
         viewport       = new FitViewport(Config.WIDTH, Config.HEIGHT, camera);
-        viewport.apply();
+        viewport.apply(true);
 
         assetLoader  = new AssetLoader();
         sceneManager = new SceneManager(batch, shapeRenderer, camera, assetLoader, this);
@@ -66,25 +67,30 @@ public class Ludobox implements ApplicationListener{
 
     @Override
     public void render() {
-        float deltaTime = Math.min(Gdx.graphics.getDeltaTime(), 1f / 30f);
+        float deltaTime = Math.min(Gdx.graphics.getDeltaTime(), 1f / 60f);
 
         Gdx.gl.glClearColor(0.00f, 0.00f, 0.00f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-    
+        
+        //Update game objects, physics and camera
+        sceneManager.update(deltaTime);
+        stage.act(deltaTime);
+
+        //Recalcule the camera matriz after camera moved
         camera.update();
         batch.setProjectionMatrix(camera.combined);
         shapeRenderer.setProjectionMatrix(camera.combined);
 
-        sceneManager.update(deltaTime);
+        //Rende with camera updated
         sceneManager.render(deltaTime);
 
-        stage.act(deltaTime);
+        //UI over ther worl
         stage.draw();
     }
 
     @Override
     public void resize(int width, int height) {
-        viewport.update(width, height, true);
+        viewport.update(width, height, false);
         stage.getViewport().update(width, height, true);
         sceneManager.resize(width, height);
     }

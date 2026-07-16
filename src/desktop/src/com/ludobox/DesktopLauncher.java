@@ -23,7 +23,7 @@ public class DesktopLauncher {
         configApplication.useVsync(true);
 
         Config config = new Config();
-        config.physicDebug = true;
-        new Lwjgl3Application(new Ludobox(new GameScene(), config), configApplication);
+        //config.physicDebug = true;
+        new Lwjgl3Application(new Ludobox(new GameLevel(), config), configApplication);
     }
 }
