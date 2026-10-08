@@ -18,6 +18,7 @@ This is a simple 2D Game Framework to desktop.
 - ✅ Assets Manager
 - ✅ Scene Manager
 - ✅ 2D Render
+- ✅ 2D Physics
 ---
 
 ## 🛠 Technologies
@@ -154,7 +155,7 @@ public class PlayerController extends Component {
 - [x] GameObject Systems
 - [x] Sprite renders
 - [x] Components System
-- [ ] 2D Physics
+- [x] 2D Physics
 - [ ] UI
 - [ ] Particle System
 - [ ] Multplatform
